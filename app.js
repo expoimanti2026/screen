@@ -65,6 +65,44 @@ function createDefaultData() {
 
 }
 
+function updateDate() {
+
+    const dateElement =
+        document.getElementById("currentDate");
+
+    if (!dateElement) return;
+
+    const now = new Date();
+
+    const day =
+        String(now.getDate()).padStart(2, "0");
+
+    const monthNames = [
+        "ene",
+        "feb",
+        "mar",
+        "abr",
+        "may",
+        "jun",
+        "jul",
+        "ago",
+        "sep",
+        "oct",
+        "nov",
+        "dic"
+    ];
+
+    const month =
+        monthNames[now.getMonth()];
+
+    const year =
+        now.getFullYear();
+
+    dateElement.textContent =
+        `📅${day}/${month}/${year}`;
+
+}
+
 
 /* ============================================================
    LOAD / SAVE
@@ -202,6 +240,7 @@ const pictogramUploadInput =
 document.addEventListener(
     "DOMContentLoaded",
     () => {
+        updateDate();
 
         setupButtons();
 

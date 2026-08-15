@@ -72,11 +72,9 @@ input {
     white-space: nowrap;
 
     margin-right: 8px;
+    font-size: 30px;
 }
 
-.brand-icon {
-    font-size: 25px;
-}
 
 .screen-controls,
 .top-actions {
