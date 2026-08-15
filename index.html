@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Classroom Screen</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- =========================
+         TOP BAR
+    ========================== -->
+
+    <header class="topbar">
+
+        <div class="brand">
+            <span class="brand-icon">💻</span>
+            <span>Classroom Screen</span>
+        </div>
+
+        <div class="screen-controls">
+<!-- 
+            <button id="prevScreenBtn" title="Previous screen">
+                ←
+            </button>
+
+            <button id="nextScreenBtn" title="Next screen">
+                →
+            </button>
+-->
+            <select id="screenSelect"></select>
+
+            <button id="addScreenBtn">
+                + Screen
+            </button>
+
+            <button id="renameScreenBtn">
+                Rename
+            </button>
+
+            <button id="duplicateScreenBtn">
+                Duplicate
+            </button>
+
+            <button id="deleteScreenBtn" class="danger">
+                Delete
+            </button>
+
+        </div>
+
+        <div class="top-actions">
+
+            <button id="addTextBtn">
+                📝 Text
+            </button>
+
+            <button id="addTimerBtn">
+                ⏱ Timer
+            </button>
+
+            <button id="addImageBtn">
+                🖼 Image
+            </button>
+
+            <button id="addChecklistBtn">
+                ☑ Checklist
+            </button>
+
+            <button id="addNoiseBtn">
+                🎤 Noise
+            </button>
+            <button id="addIframeBtn">
+                🌐 Embed
+            </button>
+
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         TOOLBAR
+    ========================== -->
+
+    <div id="textToolbar" class="floating-toolbar hidden">
+
+        <select id="fontSizeSelect">
+            <option value="">Font size</option>
+            <option value="12">12</option>
+            <option value="14">14</option>
+            <option value="16">16</option>
+            <option value="18">18</option>
+            <option value="20">20</option>
+            <option value="24">24</option>
+            <option value="28">28</option>
+            <option value="32">32</option>
+            <option value="40">40</option>
+            <option value="48">48</option>
+            <option value="60">60</option>
+            <option value="72">72</option>
+            <option value="96">96</option>
+        </select>
+
+        <button data-command="bold">
+            <strong>B</strong>
+        </button>
+
+        <button data-command="italic">
+            <em>I</em>
+        </button>
+
+        <button data-command="underline">
+            <u>U</u>
+        </button>
+
+        <input
+            type="color"
+            id="textColorPicker"
+            value="#111111"
+            title="Text color"
+        >
+
+    </div>
+
+
+    <!-- =========================
+         MAIN CANVAS
+    ========================== -->
+
+    <main id="screenCanvas">
+
+        <div id="emptyMessage">
+
+            <div class="empty-icon">🎓</div>
+
+            <h2>Welcome to your classroom screen</h2>
+
+            <p>
+                Add a widget using the buttons above.
+            </p>
+
+            <p class="keyboard-hint">
+                Use <kbd>←</kbd> and <kbd>→</kbd> to switch screens.
+            </p>
+
+        </div>
+
+    </main>
+
+
+    <!-- =========================
+         MODAL
+    ========================== -->
+
+    <div id="modalOverlay" class="modal-overlay hidden">
+
+        <div id="modal" class="modal">
+
+            <button id="closeModalBtn" class="modal-close">
+                ×
+            </button>
+
+            <div id="modalContent"></div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         HIDDEN FILE INPUTS
+    ========================== -->
+
+    <input
+        type="file"
+        id="imageUploadInput"
+        accept="image/*"
+        hidden
+    >
+
+    <input
+        type="file"
+        id="pictogramUploadInput"
+        accept="image/*"
+        hidden
+    >
+
+
+    <script src="app.js"></script>
+
+</body>
+</html>

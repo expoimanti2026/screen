@@ -1,0 +1,950 @@
+/* =========================================
+   GLOBAL
+========================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+
+    width: 100%;
+    height: 100%;
+
+    overflow: hidden;
+
+    font-family:
+        Inter,
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background: #eef2f7;
+
+    color: #1f2937;
+}
+
+button,
+select,
+input {
+    font: inherit;
+}
+
+
+/* =========================================
+   TOP BAR
+========================================= */
+
+.topbar {
+    height: 64px;
+
+    background: #172033;
+
+    color: white;
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 8px 14px;
+
+    position: relative;
+
+    z-index: 10000;
+
+    box-shadow:
+        0 2px 8px rgba(0,0,0,.2);
+}
+
+.brand {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    font-weight: 700;
+
+    white-space: nowrap;
+
+    margin-right: 8px;
+}
+
+.brand-icon {
+    font-size: 25px;
+}
+
+.screen-controls,
+.top-actions {
+    display: flex;
+
+    align-items: center;
+
+    gap: 5px;
+}
+
+.top-actions {
+    margin-left: auto;
+}
+
+.topbar button,
+.topbar select {
+    border: none;
+
+    border-radius: 7px;
+
+    padding: 8px 11px;
+
+    background: #2b3850;
+
+    color: white;
+
+    cursor: pointer;
+
+    transition: background .15s;
+}
+
+.topbar button:hover {
+    background: #3b4a65;
+}
+
+.topbar button.danger:hover {
+    background: #b42318;
+}
+
+.topbar select {
+    max-width: 180px;
+}
+
+.topbar .danger {
+    background: #8e2630;
+}
+
+
+/* =========================================
+   CANVAS
+========================================= */
+
+#screenCanvas {
+    position: absolute;
+
+    left: 0;
+    right: 0;
+
+    top: 64px;
+    bottom: 0;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(0,0,0,.025) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            rgba(0,0,0,.025) 1px,
+            transparent 1px
+        );
+
+    background-size: 25px 25px;
+}
+
+
+/* =========================================
+   EMPTY MESSAGE
+========================================= */
+
+#emptyMessage {
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    transform: translate(-50%, -50%);
+
+    text-align: center;
+
+    color: #64748b;
+
+    pointer-events: none;
+}
+
+.empty-icon {
+    font-size: 60px;
+}
+
+#emptyMessage h2 {
+    margin-bottom: 8px;
+
+    color: #334155;
+}
+
+.keyboard-hint {
+    margin-top: 20px;
+}
+
+kbd {
+    background: white;
+
+    border: 1px solid #cbd5e1;
+
+    border-bottom-width: 2px;
+
+    border-radius: 5px;
+
+    padding: 2px 7px;
+}
+
+
+/* =========================================
+   WIDGET
+========================================= */
+
+.widget {
+    position: absolute;
+
+    min-width: 120px;
+    min-height: 80px;
+
+    background: white;
+
+    border-radius: 12px;
+
+    border: 2px solid transparent;
+
+    box-shadow:
+        0 5px 20px rgba(15,23,42,.12);
+
+    overflow: visible;
+
+    user-select: none;
+}
+
+.widget.selected {
+    border-color: #3b82f6;
+
+    box-shadow:
+        0 0 0 2px rgba(59,130,246,.15),
+        0 8px 25px rgba(15,23,42,.15);
+}
+
+.widget-header {
+    height: 30px;
+
+    background: #f1f5f9;
+
+    border-radius: 10px 10px 0 0;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 3px 7px;
+
+    cursor: move;
+}
+
+.widget-title {
+    font-size: 12px;
+
+    font-weight: 700;
+
+    color: #64748b;
+}
+
+.widget-delete {
+    width: 23px;
+    height: 23px;
+
+    padding: 0;
+
+    border: none;
+
+    background: transparent;
+
+    color: #64748b;
+
+    cursor: pointer;
+
+    border-radius: 5px;
+}
+
+.widget-delete:hover {
+    background: #fee2e2;
+
+    color: #dc2626;
+}
+
+.widget-content {
+    width: 100%;
+    height: calc(100% - 30px);
+
+    padding: 10px;
+
+    overflow: hidden;
+}
+
+
+/* =========================================
+   RESIZE HANDLE
+========================================= */
+
+.resize-handle {
+    position: absolute;
+
+    right: -5px;
+    bottom: -5px;
+
+    width: 16px;
+    height: 16px;
+
+    cursor: nwse-resize;
+
+    background: #3b82f6;
+
+    border: 2px solid white;
+
+    border-radius: 50%;
+
+    opacity: 0;
+
+    transition: opacity .15s;
+}
+
+.widget:hover .resize-handle,
+.widget.selected .resize-handle {
+    opacity: 1;
+}
+
+
+/* =========================================
+   TEXT WIDGET
+========================================= */
+
+.text-widget-content {
+    width: 100%;
+    height: 100%;
+
+    overflow: auto;
+
+    outline: none;
+
+    cursor: text;
+
+    user-select: text;
+
+    white-space: normal;
+
+    word-break: break-word;
+}
+
+.text-widget-content:focus {
+    outline: none;
+}
+
+
+/* =========================================
+   FLOATING TEXT TOOLBAR
+========================================= */
+
+.floating-toolbar {
+    position: fixed;
+
+    top: 72px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    background: white;
+
+    border-radius: 8px;
+
+    box-shadow:
+        0 5px 20px rgba(0,0,0,.2);
+
+    padding: 6px;
+
+    display: flex;
+
+    gap: 4px;
+
+    z-index: 20000;
+}
+
+.floating-toolbar button,
+.floating-toolbar select {
+    border: 1px solid #cbd5e1;
+
+    background: white;
+
+    border-radius: 5px;
+
+    padding: 5px 9px;
+
+    cursor: pointer;
+}
+
+.floating-toolbar button:hover {
+    background: #eff6ff;
+}
+
+.floating-toolbar input {
+    width: 35px;
+
+    height: 30px;
+
+    border: none;
+}
+
+
+/* =========================================
+   TIMER
+========================================= */
+
+.timer-display {
+    height: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+.timer-time {
+    font-size: clamp(30px, 8vw, 80px);
+
+    font-weight: 800;
+
+    font-variant-numeric: tabular-nums;
+
+    color: #111827;
+}
+
+.timer-buttons {
+    display: flex;
+
+    gap: 6px;
+
+    margin-top: 8px;
+}
+
+.timer-buttons button {
+    border: none;
+
+    border-radius: 6px;
+
+    padding: 5px 9px;
+
+    background: #2563eb;
+
+    color: white;
+
+    cursor: pointer;
+}
+
+.timer-buttons button:hover {
+    background: #1d4ed8;
+}
+
+.timer-presets {
+    display: flex;
+
+    gap: 4px;
+
+    margin-top: 6px;
+}
+
+.timer-presets button {
+    border: 1px solid #cbd5e1;
+
+    background: white;
+
+    border-radius: 5px;
+
+    padding: 3px 6px;
+
+    cursor: pointer;
+}
+
+
+/* =========================================
+   IMAGE WIDGET
+========================================= */
+
+.image-widget {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.image-widget img {
+    max-width: 100%;
+    max-height: 100%;
+
+    object-fit: contain;
+
+    border-radius: 6px;
+}
+
+
+/* =========================================
+   CHECKLIST
+========================================= */
+
+.checklist {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+
+    overflow-y: auto;
+}
+
+.check-item {
+    display: grid;
+
+    grid-template-columns: 52px 1fr 30px;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 5px;
+
+    border-radius: 8px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+}
+
+.check-item img {
+    width: 54px;
+    height: 54px;
+
+    object-fit: contain;
+}
+
+.check-item-text {
+    font-size: 28px;
+
+    font-weight: 600;
+
+    min-width: 0;
+
+    word-break: break-word;
+}
+
+.check-item input[type="checkbox"] {
+    width: 25px;
+    height: 25px;
+
+    cursor: pointer;
+}
+
+.check-item.completed .check-item-text {
+    text-decoration: line-through;
+
+    opacity: .5;
+}
+
+.checklist-controls {
+    display: flex;
+
+    gap: 5px;
+
+    margin-top: auto;
+}
+
+.checklist-controls button {
+    border: none;
+
+    border-radius: 6px;
+
+    padding: 7px 10px;
+
+    background: #96b3f3;
+
+    color: white;
+
+    cursor: pointer;
+}
+
+
+/* =========================================
+   NOISE METER
+========================================= */
+
+.noise-widget {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+.noise-level {
+    width: 90%;
+
+    height: 35px;
+
+    background: #e5e7eb;
+
+    border-radius: 20px;
+
+    overflow: hidden;
+}
+
+.noise-bar {
+    height: 100%;
+
+    width: 0%;
+
+    background: #22c55e;
+
+    transition:
+        width .1s,
+        background .2s;
+}
+
+.noise-label {
+    margin-top: 10px;
+
+    font-size: 20px;
+
+    font-weight: 700;
+}
+
+.noise-start {
+    margin-top: 8px;
+
+    border: none;
+
+    background: #2563eb;
+
+    color: white;
+
+    padding: 7px 12px;
+
+    border-radius: 6px;
+
+    cursor: pointer;
+}
+
+
+/* =========================================
+   MODAL
+========================================= */
+
+.modal-overlay {
+    position: fixed;
+
+    inset: 0;
+
+    background: rgba(15,23,42,.55);
+
+    z-index: 30000;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+}
+
+.modal {
+    position: relative;
+
+    width: min(700px, 92vw);
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    background: white;
+
+    border-radius: 14px;
+
+    padding: 24px;
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.3);
+}
+
+.modal-close {
+    position: absolute;
+
+    top: 10px;
+    right: 12px;
+
+    border: none;
+
+    background: transparent;
+
+    font-size: 28px;
+
+    color: #64748b;
+
+    cursor: pointer;
+}
+
+
+/* =========================================
+   CHECKLIST EDITOR
+========================================= */
+
+.checklist-editor {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 15px;
+}
+
+.checklist-item-editor {
+    display: grid;
+
+    grid-template-columns: 70px 1fr 120px 40px;
+
+    gap: 8px;
+
+    align-items: center;
+
+    padding: 10px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 8px;
+}
+
+.pictogram-preview {
+    width: 60px;
+    height: 60px;
+
+    object-fit: contain;
+
+    background: white;
+
+    border-radius: 6px;
+
+    border: 1px solid #cbd5e1;
+}
+
+.checklist-item-editor input[type="text"] {
+    width: 100%;
+
+    padding: 9px;
+
+    border: 1px solid #cbd5e1;
+
+    border-radius: 6px;
+}
+
+.checklist-item-editor select {
+    padding: 8px;
+
+    border: 1px solid #cbd5e1;
+
+    border-radius: 6px;
+
+    min-width: 0;
+}
+
+.remove-check-item {
+    border: none;
+
+    background: #fee2e2;
+
+    color: #dc2626;
+
+    width: 32px;
+    height: 32px;
+
+    border-radius: 6px;
+
+    cursor: pointer;
+}
+
+.modal-buttons {
+    display: flex;
+
+    gap: 8px;
+
+    margin-top: 20px;
+}
+
+.primary-button,
+.secondary-button {
+    border: none;
+
+    border-radius: 7px;
+
+    padding: 9px 14px;
+
+    cursor: pointer;
+}
+
+.primary-button {
+    background: #2563eb;
+
+    color: white;
+}
+
+.secondary-button {
+    background: #e2e8f0;
+
+    color: #1e293b;
+}
+
+
+/* =========================================
+   PICTOGRAM BANK
+========================================= */
+
+.pictogram-bank {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fill, minmax(90px, 1fr));
+
+    gap: 10px;
+
+    margin-top: 15px;
+}
+
+.pictogram-card {
+    position: relative;
+
+    border: 2px solid #e2e8f0;
+
+    border-radius: 8px;
+
+    padding: 8px;
+
+    background: white;
+
+    cursor: pointer;
+
+    text-align: center;
+}
+
+.pictogram-card:hover {
+    border-color: #3b82f6;
+}
+
+.pictogram-card img {
+    width: 65px;
+    height: 65px;
+
+    object-fit: contain;
+}
+
+.pictogram-card span {
+    display: block;
+
+    font-size: 11px;
+
+    color: #64748b;
+
+    overflow: hidden;
+
+    white-space: nowrap;
+
+    text-overflow: ellipsis;
+}
+
+
+/* =========================================
+   HIDDEN
+========================================= */
+
+.hidden {
+    display: none !important;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 1000px) {
+
+    .topbar {
+        height: auto;
+
+        min-height: 64px;
+
+        flex-wrap: wrap;
+    }
+
+    .top-actions {
+        margin-left: 0;
+    }
+
+    #screenCanvas {
+        top: 110px;
+    }
+
+}
+
+@media (max-width: 650px) {
+
+    .brand {
+        display: none;
+    }
+
+    .topbar button {
+        padding: 6px 8px;
+    }
+
+    .checklist-item-editor {
+        grid-template-columns: 55px 1fr 35px;
+    }
+
+    .checklist-item-editor select {
+        grid-column: 2;
+    }
+
+}
+/* ============================================================
+   IFRAME WIDGET
+============================================================ */
+
+.iframe-widget {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: white;
+}
+
+.iframe-widget iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+}
