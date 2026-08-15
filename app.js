@@ -41,7 +41,7 @@ function createDefaultData() {
 
                 id: createId(),
 
-                name: "Monday",
+                name: "Tecnología",
 
                 widgets: []
 
@@ -51,7 +51,7 @@ function createDefaultData() {
 
                 id: createId(),
 
-                name: "Tuesday",
+                name: "IA",
 
                 widgets: []
 
