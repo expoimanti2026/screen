@@ -819,6 +819,153 @@ kbd {
     color: #1e293b;
 }
 
+/* =========================================
+   CHECKLIST EDITOR DRAG & DROP
+========================================= */
+
+.checklist-item-editor {
+    display: grid;
+
+    grid-template-columns:
+        34px
+        50px
+        1fr
+        180px
+        36px;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 8px;
+
+    margin-bottom: 6px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 8px;
+
+    transition:
+        opacity .15s,
+        border-color .15s,
+        box-shadow .15s;
+}
+
+
+/* Drag handle */
+
+.checklist-drag-handle {
+    width: 30px;
+    height: 30px;
+
+    border: none;
+
+    border-radius: 6px;
+
+    background: #e2e8f0;
+
+    color: #64748b;
+
+    font-size: 18px;
+
+    line-height: 1;
+
+    cursor: grab;
+
+    user-select: none;
+}
+
+.checklist-drag-handle:hover {
+    background: #cbd5e1;
+
+    color: #334155;
+}
+
+.checklist-drag-handle:active {
+    cursor: grabbing;
+}
+
+
+/* Dragged item */
+
+.checklist-item-dragging {
+    opacity: .4;
+}
+
+
+/* Item being hovered over */
+
+.checklist-item-drag-over {
+    border-color: #4f7df3;
+
+    box-shadow:
+        0 -3px 0 #4f7df3;
+}
+
+
+/* Pictogram preview */
+
+.checklist-item-editor
+.pictogram-preview {
+    width: 44px;
+    height: 44px;
+
+    object-fit: contain;
+
+    border-radius: 5px;
+
+    background: #ffffff;
+
+    border: 1px solid #e2e8f0;
+}
+
+
+/* Text input */
+
+.checklist-item-editor input[type="text"] {
+    min-width: 0;
+
+    width: 100%;
+
+    box-sizing: border-box;
+}
+
+
+/* Pictogram select */
+
+.checklist-item-editor select {
+    min-width: 0;
+
+    width: 100%;
+}
+
+
+/* Remove button */
+
+.checklist-item-editor
+.remove-check-item {
+    width: 30px;
+    height: 30px;
+
+    border: none;
+
+    border-radius: 6px;
+
+    background: #fee2e2;
+
+    color: #dc2626;
+
+    font-size: 20px;
+
+    cursor: pointer;
+}
+
+.checklist-item-editor
+.remove-check-item:hover {
+    background: #fecaca;
+}
 
 /* =========================================
    PICTOGRAM BANK

@@ -1779,6 +1779,9 @@ function renderChecklistEditor() {
 
     editor.innerHTML = "";
 
+    let draggedItemId = null;
+
+
     editingChecklistWidget.items.forEach(
         item => {
 
@@ -1788,6 +1791,85 @@ function renderChecklistEditor() {
             row.className =
                 "checklist-item-editor";
 
+
+            /* ====================================================
+               DRAG HANDLE
+            ==================================================== */
+
+            const handle =
+                document.createElement("button");
+
+            handle.type = "button";
+
+            handle.className =
+                "checklist-drag-handle";
+
+            handle.textContent =
+                "☰";
+
+            handle.title =
+                "Drag to reorder";
+
+            handle.draggable = true;
+
+
+            handle.addEventListener(
+                "dragstart",
+                event => {
+
+                    draggedItemId =
+                        item.id;
+
+                    row.classList.add(
+                        "checklist-item-dragging"
+                    );
+
+                    event.dataTransfer.effectAllowed =
+                        "move";
+
+                    event.dataTransfer.setData(
+                        "text/plain",
+                        item.id
+                    );
+
+                }
+            );
+
+
+            handle.addEventListener(
+                "dragend",
+                () => {
+
+                    draggedItemId = null;
+
+                    row.classList.remove(
+                        "checklist-item-dragging"
+                    );
+
+                    document
+                        .querySelectorAll(
+                            ".checklist-item-drag-over"
+                        )
+                        .forEach(
+                            element => {
+
+                                element.classList.remove(
+                                    "checklist-item-drag-over"
+                                );
+
+                            }
+                        );
+
+                }
+            );
+
+
+            row.appendChild(handle);
+
+
+            /* ====================================================
+               PICTOGRAM PREVIEW
+            ==================================================== */
 
             const preview =
                 document.createElement("img");
@@ -1804,6 +1886,10 @@ function renderChecklistEditor() {
 
             row.appendChild(preview);
 
+
+            /* ====================================================
+               TEXT
+            ==================================================== */
 
             const text =
                 document.createElement("input");
@@ -1826,6 +1912,10 @@ function renderChecklistEditor() {
 
             row.appendChild(text);
 
+
+            /* ====================================================
+               PICTOGRAM SELECT
+            ==================================================== */
 
             const select =
                 document.createElement(
@@ -1866,7 +1956,8 @@ function renderChecklistEditor() {
                         pictogram.id
                     ) {
 
-                        option.selected = true;
+                        option.selected =
+                            true;
 
                     }
 
@@ -1907,6 +1998,7 @@ function renderChecklistEditor() {
 
                     }
 
+
                     if (
                         item.pictogram
                     ) {
@@ -1927,6 +2019,10 @@ function renderChecklistEditor() {
 
             row.appendChild(select);
 
+
+            /* ====================================================
+               REMOVE BUTTON
+            ==================================================== */
 
             const remove =
                 document.createElement(
@@ -1958,13 +2054,164 @@ function renderChecklistEditor() {
 
             row.appendChild(remove);
 
+
+            /* ====================================================
+               DRAG OVER
+            ==================================================== */
+
+            row.addEventListener(
+                "dragover",
+                event => {
+
+                    if (
+                        !draggedItemId ||
+                        draggedItemId === item.id
+                    ) {
+
+                        return;
+
+                    }
+
+                    event.preventDefault();
+
+                    event.dataTransfer.dropEffect =
+                        "move";
+
+                    row.classList.add(
+                        "checklist-item-drag-over"
+                    );
+
+                }
+            );
+
+
+            row.addEventListener(
+                "dragleave",
+                () => {
+
+                    row.classList.remove(
+                        "checklist-item-drag-over"
+                    );
+
+                }
+            );
+
+
+            row.addEventListener(
+                "drop",
+                event => {
+
+                    event.preventDefault();
+
+                    row.classList.remove(
+                        "checklist-item-drag-over"
+                    );
+
+
+                    const sourceId =
+                        event.dataTransfer.getData(
+                            "text/plain"
+                        );
+
+                    if (
+                        !sourceId ||
+                        sourceId === item.id
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    const items =
+                        editingChecklistWidget.items;
+
+                    const sourceIndex =
+                        items.findIndex(
+                            i =>
+                                i.id ===
+                                sourceId
+                        );
+
+                    const targetIndex =
+                        items.findIndex(
+                            i =>
+                                i.id ===
+                                item.id
+                        );
+
+
+                    if (
+                        sourceIndex === -1 ||
+                        targetIndex === -1
+                    ) {
+
+                        return;
+
+                    }
+
+
+                    const [
+                        movedItem
+                    ] =
+                        items.splice(
+                            sourceIndex,
+                            1
+                        );
+
+
+                    /*
+                       Determine whether the item
+                       should be inserted before or
+                       after the item being hovered.
+                    */
+
+                    const rect =
+                        row.getBoundingClientRect();
+
+                    const mouseY =
+                        event.clientY;
+
+                    const insertAfter =
+                        mouseY >
+                        rect.top +
+                        rect.height / 2;
+
+
+                    let newIndex =
+                        items.findIndex(
+                            i =>
+                                i.id ===
+                                item.id
+                        );
+
+
+                    if (insertAfter) {
+
+                        newIndex++;
+
+                    }
+
+
+                    items.splice(
+                        newIndex,
+                        0,
+                        movedItem
+                    );
+
+
+                    renderChecklistEditor();
+
+                }
+            );
+
+
             editor.appendChild(row);
 
         }
     );
 
 }
-
 
 /* ============================================================
    PICTOGRAM BANK
