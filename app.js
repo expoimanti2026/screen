@@ -151,6 +151,8 @@ function saveData() {
             JSON.stringify(appData)
         );
 
+        return true;
+
     } catch (error) {
 
         console.error(
@@ -159,12 +161,15 @@ function saveData() {
         );
 
         alert(
-            "The browser could not save this data. Large uploaded images can exceed local storage limits."
+            "Storage is full. Please delete some pictograms or images and try again."
         );
+
+        return false;
 
     }
 
 }
+
 
 
 /* ============================================================
@@ -2224,40 +2229,139 @@ function handlePictogramUpload(event) {
 
     if (!file) return;
 
+
     const reader =
         new FileReader();
+
 
     reader.onload =
         () => {
 
-            const pictogram = {
+            const img =
+                new Image();
 
-                id: createId(),
 
-                name:
-                    file.name.replace(
-                        /\.[^/.]+$/,
-                        ""
-                    ),
+            img.onload =
+                () => {
 
-                src:
-                    reader.result
+                    /*
+                     * Maximum pictogram dimensions.
+                     * Pictograms do not need to be huge.
+                     */
 
-            };
+                    const MAX_SIZE = 500;
 
-            appData.pictograms.push(
-                pictogram
-            );
+                    let width =
+                        img.width;
 
-            saveData();
+                    let height =
+                        img.height;
 
-            renderPictogramBank();
 
-            renderChecklistEditor();
+                    /*
+                     * Resize only if necessary.
+                     */
+
+                    if (
+                        width > MAX_SIZE ||
+                        height > MAX_SIZE
+                    ) {
+
+                        const scale =
+                            Math.min(
+                                MAX_SIZE / width,
+                                MAX_SIZE / height
+                            );
+
+                        width =
+                            Math.round(
+                                width * scale
+                            );
+
+                        height =
+                            Math.round(
+                                height * scale
+                            );
+
+                    }
+
+
+                    const canvas =
+                        document.createElement(
+                            "canvas"
+                        );
+
+                    canvas.width =
+                        width;
+
+                    canvas.height =
+                        height;
+
+
+                    const context =
+                        canvas.getContext("2d");
+
+
+                    context.drawImage(
+                        img,
+                        0,
+                        0,
+                        width,
+                        height
+                    );
+
+
+                    /*
+                     * JPEG keeps the localStorage
+                     * footprint much smaller.
+                     */
+
+                    const compressedImage =
+                        canvas.toDataURL(
+                            "image/jpeg",
+                            0.80
+                        );
+
+
+                    const pictogram = {
+
+                        id:
+                            createId(),
+
+                        name:
+                            file.name.replace(
+                                /\.[^/.]+$/,
+                                ""
+                            ),
+
+                        src:
+                            compressedImage
+
+                    };
+
+
+                    appData.pictograms.push(
+                        pictogram
+                    );
+
+
+                    saveData();
+
+                    renderPictogramBank();
+
+                    renderChecklistEditor();
+
+                };
+
+
+            img.src =
+                reader.result;
 
         };
 
+
     reader.readAsDataURL(file);
+
 
     event.target.value = "";
 
@@ -2301,11 +2405,20 @@ function renderPictogramBank() {
             card.className =
                 "pictogram-card";
 
+
+            /* PICTOGRAM IMAGE */
+
             const img =
                 document.createElement("img");
 
             img.src =
                 pictogram.src;
+
+            img.alt =
+                pictogram.name;
+
+
+            /* PICTOGRAM NAME */
 
             const name =
                 document.createElement("span");
@@ -2313,10 +2426,49 @@ function renderPictogramBank() {
             name.textContent =
                 pictogram.name;
 
+
+            /* DELETE BUTTON */
+
+            const deleteButton =
+                document.createElement("button");
+
+            deleteButton.type =
+                "button";
+
+            deleteButton.className =
+                "pictogram-delete";
+
+            deleteButton.textContent =
+                "×";
+
+            deleteButton.title =
+                "Delete pictogram";
+
+
+            deleteButton.addEventListener(
+                "click",
+                event => {
+
+                    event.stopPropagation();
+
+                    deletePictogram(
+                        pictogram.id
+                    );
+
+                }
+            );
+
+
             card.appendChild(img);
 
             card.appendChild(name);
 
+            card.appendChild(
+                deleteButton
+            );
+
+
+            /* SELECT PICTOGRAM */
 
             card.addEventListener(
                 "click",
@@ -2325,11 +2477,6 @@ function renderPictogramBank() {
                     if (
                         !editingChecklistWidget
                     ) return;
-
-                    /*
-                     * Put the pictogram on the
-                     * most recently selected item.
-                     */
 
                     const items =
                         editingChecklistWidget.items;
@@ -2354,10 +2501,98 @@ function renderPictogramBank() {
                 }
             );
 
+
             bank.appendChild(card);
 
         }
     );
+
+}
+function deletePictogram(id) {
+
+    const pictogram =
+        appData.pictograms.find(
+            p => p.id === id
+        );
+
+    if (!pictogram) return;
+
+
+    const confirmed =
+        confirm(
+            `Delete pictogram "${pictogram.name}"?`
+        );
+
+    if (!confirmed) return;
+
+
+    /*
+     * Remove the pictogram from the bank.
+     */
+
+    appData.pictograms =
+        appData.pictograms.filter(
+            p => p.id !== id
+        );
+
+
+    /*
+     * Remove references to this pictogram
+     * from all checklist items.
+     */
+
+    appData.screens.forEach(
+        screen => {
+
+            screen.widgets.forEach(
+                widget => {
+
+                    if (
+                        widget.type !== "checklist" ||
+                        !Array.isArray(widget.items)
+                    ) {
+                        return;
+                    }
+
+                    widget.items.forEach(
+                        item => {
+
+                            if (
+                                item.pictogramId === id
+                            ) {
+
+                                item.pictogramId =
+                                    null;
+
+                                item.pictogram =
+                                    null;
+
+                            }
+
+                        }
+                    );
+
+                }
+            );
+
+        }
+    );
+
+
+    /*
+     * Save the smaller data structure.
+     */
+
+    saveData();
+
+
+    /*
+     * Refresh the bank and checklist editor.
+     */
+
+    renderPictogramBank();
+
+    renderChecklistEditor();
 
 }
 
