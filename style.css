@@ -414,11 +414,11 @@ kbd {
     flex-direction: column;
 
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
 
-    container-type: size;
+    gap: 8px;
 
-    padding: 10px 5px 5px;
+    overflow: hidden;
 }
 
 .timer-time {
@@ -430,12 +430,6 @@ kbd {
     align-items: center;
     justify-content: center;
 
-    font-size: clamp(
-        50px,
-        28cqw,
-        220px
-    );
-
     font-weight: 800;
 
     font-variant-numeric: tabular-nums;
@@ -445,17 +439,18 @@ kbd {
     line-height: 0.9;
 
     white-space: nowrap;
+
     overflow: hidden;
 }
 
-
-
 .timer-buttons {
+    flex: 0 0 auto;
+
     display: flex;
 
     gap: 6px;
 
-    margin-top: 8px;
+    margin-top: 4px;
 }
 
 .timer-buttons button {
@@ -470,26 +465,22 @@ kbd {
     color: white;
 
     cursor: pointer;
+
+    white-space: nowrap;
 }
 
 .timer-buttons button:hover {
     background: #1d4ed8;
 }
-.timer-buttons button:last-child {
-    background: #16a34a;
-}
-
-.timer-buttons button:last-child:hover {
-    background: #15803d;
-}
-
 
 .timer-presets {
     display: flex;
 
     gap: 4px;
 
-    margin-top: 6px;
+    flex: 0 0 auto;
+
+    margin-top: 0;
 }
 
 .timer-presets button {
@@ -502,8 +493,9 @@ kbd {
     padding: 3px 6px;
 
     cursor: pointer;
-}
 
+    white-space: nowrap;
+}
 
 /* =========================================
    IMAGE WIDGET
