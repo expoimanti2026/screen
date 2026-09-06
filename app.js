@@ -1245,6 +1245,10 @@ function renderTimerWidget(
     wrapper.appendChild(presets);
 
     content.appendChild(wrapper);
+    resizeTimerFont(
+    wrapper,
+    display
+    );
 
     if (
         widgetData.running
@@ -1257,6 +1261,120 @@ function renderTimerWidget(
         );
 
     }
+
+}
+function resizeTimerFont(
+    wrapper,
+    display
+) {
+
+    if (!wrapper || !display) return;
+
+
+    const availableWidth =
+        wrapper.clientWidth - 10;
+
+    const availableHeight =
+        wrapper.clientHeight - 10;
+
+
+    if (
+        availableWidth <= 0 ||
+        availableHeight <= 0
+    ) {
+        return;
+    }
+
+
+    /*
+     * The timer always uses the same visual
+     * format, so we can measure a temporary
+     * copy of the actual displayed number.
+     */
+
+    const test =
+        document.createElement("span");
+
+    test.textContent =
+        display.textContent || "00:00";
+
+    test.style.position =
+        "absolute";
+
+    test.style.visibility =
+        "hidden";
+
+    test.style.whiteSpace =
+        "nowrap";
+
+    test.style.fontFamily =
+        getComputedStyle(display).fontFamily;
+
+    test.style.fontWeight =
+        getComputedStyle(display).fontWeight;
+
+    test.style.fontVariantNumeric =
+        "tabular-nums";
+
+    test.style.lineHeight =
+        "0.9";
+
+    test.style.fontSize =
+        "10px";
+
+
+    document.body.appendChild(test);
+
+
+    const baseWidth =
+        test.getBoundingClientRect().width;
+
+    const baseHeight =
+        test.getBoundingClientRect().height;
+
+
+    document.body.removeChild(test);
+
+
+    if (
+        baseWidth <= 0 ||
+        baseHeight <= 0
+    ) {
+        return;
+    }
+
+
+    const widthScale =
+        availableWidth / baseWidth;
+
+    const heightScale =
+        availableHeight / baseHeight;
+
+
+    let fontSize =
+        10 *
+        Math.min(
+            widthScale,
+            heightScale
+        );
+
+
+    fontSize =
+        Math.max(
+            30,
+            fontSize
+        );
+
+
+    fontSize =
+        Math.min(
+            300,
+            fontSize
+        );
+
+
+    display.style.fontSize =
+        `${fontSize}px`;
 
 }
 
@@ -3504,6 +3622,26 @@ function setupWidgetInteractions(
 
             element.style.height =
                 `${widgetData.height}px`;
+            if (
+                widgetData.type === "timer"
+            ) {
+            
+                const timerWrapper =
+                    element.querySelector(
+                        ".timer-display"
+                    );
+            
+                const timerDisplay =
+                    element.querySelector(
+                        ".timer-time"
+                    );
+            
+                resizeTimerFont(
+                    timerWrapper,
+                    timerDisplay
+                );
+            
+            }
 
         }
     );
