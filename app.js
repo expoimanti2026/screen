@@ -1085,12 +1085,13 @@ function renderTimerWidget(
    const addMinute =
     document.createElement("button");
 
-   addMinute.textContent =
-       "+1 min";
-   addMinute.className =
+addMinute.textContent =
+    "+1 min";
+
+addMinute.className =
     "timer-add-minute";
-   
-   addMinute.addEventListener(
+
+addMinute.addEventListener(
     "click",
     event => {
 
@@ -1098,11 +1099,6 @@ function renderTimerWidget(
 
         widgetData.remaining =
             (widgetData.remaining || 0) + 60;
-
-        /*
-         * If the timer is running, continue
-         * from the new remaining time.
-         */
 
         if (widgetData.running) {
 
@@ -1120,6 +1116,7 @@ function renderTimerWidget(
 
     }
 );
+
 
     const presets =
         document.createElement("div");
