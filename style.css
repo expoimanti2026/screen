@@ -1022,6 +1022,37 @@ kbd {
 
     text-overflow: ellipsis;
 }
+.pictogram-card {
+    position: relative;
+}
+
+.pictogram-delete {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+
+    width: 24px;
+    height: 24px;
+
+    border: none;
+    border-radius: 50%;
+
+    background: #ef4444;
+    color: white;
+
+    font-size: 18px;
+    line-height: 20px;
+
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pictogram-delete:hover {
+    background: #dc2626;
+}
 
 
 /* =========================================
