@@ -416,17 +416,28 @@ kbd {
     align-items: center;
 
     justify-content: center;
+
+    container-type: size;
 }
 
 .timer-time {
-    font-size: clamp(30px, 8vw, 80px);
+    font-size: clamp(
+        30px,
+        min(15cqw, 25cqh),
+        180px
+    );
 
     font-weight: 800;
 
     font-variant-numeric: tabular-nums;
 
     color: #111827;
+
+    line-height: 1;
+
+    white-space: nowrap;
 }
+
 
 .timer-buttons {
     display: flex;
@@ -453,6 +464,14 @@ kbd {
 .timer-buttons button:hover {
     background: #1d4ed8;
 }
+.timer-buttons button:last-child {
+    background: #16a34a;
+}
+
+.timer-buttons button:last-child:hover {
+    background: #15803d;
+}
+
 
 .timer-presets {
     display: flex;
