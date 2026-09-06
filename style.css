@@ -472,6 +472,15 @@ kbd {
 .timer-buttons button:hover {
     background: #1d4ed8;
 }
+.timer-buttons button.timer-add-minute {
+    background: #22c55e !important;
+    color: white;
+}
+
+.timer-buttons button.timer-add-minute:hover {
+    background: #16a34a !important;
+}
+
 
 .timer-presets {
     display: flex;
@@ -495,13 +504,6 @@ kbd {
     cursor: pointer;
 
     white-space: nowrap;
-}
-.timer-buttons .timer-add-minute {
-    background: #22c55e;
-}
-
-.timer-buttons .timer-add-minute:hover {
-    background: #16a34a;
 }
 
 /* =========================================
