@@ -1140,23 +1140,32 @@ function renderTimerWidget(
 
             button.addEventListener(
                 "click",
-                () => {
-
+                event => {
+            
+                    event.stopPropagation();
+            
                     widgetData.duration =
                         seconds;
-
+            
                     widgetData.remaining =
                         seconds;
-
+            
                     widgetData.running =
                         false;
-
+            
                     saveData();
-
-                    renderCurrentScreen();
-
+            
+                    updateTimerDisplay(
+                        display,
+                        widgetData
+                    );
+            
+                    start.textContent =
+                        "Start";
+            
                 }
             );
+
 
             presets.appendChild(button);
 
@@ -1389,7 +1398,13 @@ function updateTimerDisplay(
             widgetData.remaining
         );
 
+    resizeTimerFont(
+        display.parentElement,
+        display
+    );
+
 }
+
 
 function playTimerSound() {
     const audioContext = new (
