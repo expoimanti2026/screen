@@ -407,24 +407,33 @@ kbd {
 ========================================= */
 
 .timer-display {
+    width: 100%;
     height: 100%;
 
     display: flex;
-
     flex-direction: column;
 
     align-items: center;
-
-    justify-content: center;
+    justify-content: space-between;
 
     container-type: size;
+
+    padding: 10px 5px 5px;
 }
 
 .timer-time {
+    flex: 1;
+
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     font-size: clamp(
-        30px,
-        min(15cqw, 25cqh),
-        180px
+        50px,
+        28cqw,
+        220px
     );
 
     font-weight: 800;
@@ -433,10 +442,12 @@ kbd {
 
     color: #111827;
 
-    line-height: 1;
+    line-height: 0.9;
 
     white-space: nowrap;
+    overflow: hidden;
 }
+
 
 
 .timer-buttons {
