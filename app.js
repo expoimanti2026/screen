@@ -1087,6 +1087,9 @@ function renderTimerWidget(
 
    addMinute.textContent =
        "+1 min";
+   addMinute.className =
+    "timer-add-minute";
+   
    addMinute.addEventListener(
     "click",
     event => {
@@ -1254,10 +1257,15 @@ function renderTimerWidget(
     wrapper.appendChild(presets);
 
     content.appendChild(wrapper);
-    resizeTimerFont(
-    wrapper,
-    display
-    );
+      requestAnimationFrame(() => {
+      
+          resizeTimerFont(
+              wrapper,
+              display
+          );
+      
+      });
+
 
     if (
         widgetData.running
