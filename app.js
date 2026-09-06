@@ -1082,6 +1082,41 @@ function renderTimerWidget(
 
     reset.textContent =
         "Reset";
+   const addMinute =
+    document.createElement("button");
+
+   addMinute.textContent =
+       "+1 min";
+   addMinute.addEventListener(
+    "click",
+    event => {
+
+        event.stopPropagation();
+
+        widgetData.remaining =
+            (widgetData.remaining || 0) + 60;
+
+        /*
+         * If the timer is running, continue
+         * from the new remaining time.
+         */
+
+        if (widgetData.running) {
+
+            widgetData.lastTick =
+                Date.now();
+
+        }
+
+        saveData();
+
+        updateTimerDisplay(
+            display,
+            widgetData
+        );
+
+    }
+);
 
     const presets =
         document.createElement("div");
@@ -1203,6 +1238,7 @@ function renderTimerWidget(
 
     buttons.appendChild(start);
     buttons.appendChild(reset);
+    buttons.appendChild(addMinute);
 
     wrapper.appendChild(display);
     wrapper.appendChild(buttons);
