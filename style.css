@@ -496,6 +496,13 @@ kbd {
 
     white-space: nowrap;
 }
+.timer-buttons .timer-add-minute {
+    background: #22c55e;
+}
+
+.timer-buttons .timer-add-minute:hover {
+    background: #16a34a;
+}
 
 /* =========================================
    IMAGE WIDGET
