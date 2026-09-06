@@ -2316,11 +2316,29 @@ function handlePictogramUpload(event) {
                      * footprint much smaller.
                      */
 
-                    const compressedImage =
-                        canvas.toDataURL(
-                            "image/jpeg",
-                            0.80
-                        );
+                    let compressedImage;
+
+                     if (
+                         file.type === "image/png"
+                     ) {
+                     
+                         // Keep PNG transparency
+                         compressedImage =
+                             canvas.toDataURL(
+                                 "image/png"
+                             );
+                     
+                     } else {
+                     
+                         // Compress JPEG images
+                         compressedImage =
+                             canvas.toDataURL(
+                                 "image/jpeg",
+                                 0.80
+                             );
+                     
+                     }
+
 
 
                     const pictogram = {
