@@ -996,6 +996,8 @@ kbd {
     cursor: pointer;
 
     text-align: center;
+
+    min-height: 100px;
 }
 
 .pictogram-card:hover {
@@ -1007,6 +1009,10 @@ kbd {
     height: 65px;
 
     object-fit: contain;
+
+    display: block;
+
+    margin: 0 auto;
 }
 
 .pictogram-card span {
@@ -1021,37 +1027,60 @@ kbd {
     white-space: nowrap;
 
     text-overflow: ellipsis;
-}
-.pictogram-card {
-    position: relative;
+
+    margin-top: 4px;
 }
 
-.pictogram-delete {
+
+/* Delete pictogram button */
+
+.pictogram-card .pictogram-delete {
     position: absolute;
+
     top: 4px;
     right: 4px;
 
     width: 24px;
     height: 24px;
 
+    min-width: 24px;
+    min-height: 24px;
+
+    margin: 0;
+    padding: 0;
+
     border: none;
+
     border-radius: 50%;
 
     background: #ef4444;
+
     color: white;
 
-    font-size: 18px;
-    line-height: 20px;
+    font-size: 17px;
+    font-weight: bold;
+
+    line-height: 24px;
 
     cursor: pointer;
 
     display: flex;
+
     align-items: center;
     justify-content: center;
+
+    z-index: 10;
+
+    box-shadow:
+        0 1px 3px rgba(0,0,0,.2);
 }
 
-.pictogram-delete:hover {
+.pictogram-card .pictogram-delete:hover {
     background: #dc2626;
+
+    color: white;
+
+    transform: scale(1.08);
 }
 
 
